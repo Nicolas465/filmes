@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>filmes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h1.title {
+            background-color: cornflowerblue;
+            color: beige;
+            padding: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 20px;
+            display: flex;
+        }
+
+        form input {
+            padding: 5px;
+            border: none;
+            outline: none;
+            flex: 1;
+        }
+
+        form button {
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: darkblue;
+        }
+
+        div.lista {
+            margin-top: 10px;
+            padding: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div.item {
+            text-align: center;
+            padding: 10px;
+            width: 200px;
+            border: 2px solid cornflowerblue;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        div.item:hover {
+            background-color: cornflowerblue;
+            cursor: pointer;
+        }
+
+        div.item img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="nome test-center">
+        <h1 class="title">filmes</h1>
+    </div>
+    <div class="container">
+        <form>
+            <input name="pesquisa" placeholder="digite o nome do filme" />
+            <button type="button">pesquisar</button>
+        </form>
+    </div>
+    <div class="lista">
+        <div class="item">
+            <h2>mercenarios de elite</h2>
+            <img src="https://cdn.sincroguia.tv/uploads/programs/m/e/r/mercenarios-de-elite-poster-839773_SPA-92_V.jpg" />
+        </div>
+        <div class="item">
+            <h2>Agente Oculto</h2>
+            <img src="https://cinemacomrapadura.com.br/imagens/2022/05/20220524-agente-oculto-poster-810x1200.jpg" />
+        </div>
+        <div class="item">
+            <h2>django livre</h2>
+            <img src="img/Django.jpg" />
+        </div>
+        <div class="item">
+            <h2>invocação do mal</h2>
+            <img src="https://br.web.img3.acsta.net/r_1280_720/medias/nmedia/18/97/25/23/20532535.jpg" />
+        </div>
+        <div class="item">
+            <h2>esquadrão 6</h2>
+            <img src="https://br.web.img3.acsta.net/pictures/19/11/14/15/36/5224064.png" />
+         </div>
+         <div class="item">
+            <h2>norbit</h2>
+            <img src="https://image.tmdb.org/t/p/original/o0Exlm5Mn7j62Oer0PY9dvehPa5.jpg" />
+            </div>
+            <div class="item">
+                <h2>as branquelas</h2>
+                <img src="https://image.tmdb.org/t/p/original/aJZOcorpgloDLkPP6ED0t9sXjNu.jpg" />  
+                </div>
+                <div class="item">
+                    <h2>todo mundo em panico</h2>
+                    <img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/qqOcBboLed2U0zHgiKZYNTvU2lv.jpg" />
+                </div>
+                <div class="item">
+                    <h2>dia de treinamento</h2>
+                    <img src="https://www.cafecomfilme.com.br/media/k2/items/cache/cd5476ff13af0a2f2bd4cdb4c3863229_XL.jpg" />  
+                </div>
+                <div class="item">
+                    <h2>scarface</h2>
+                    <img src="https://wallpapercave.com/wp/wp9442725.jpg" />
+                    </div>
+                    <div class="item">
+                        <h2>pulp fiction</h2>
+                        <img src="https://cdn.kinocheck.com/i/j7qxa1uc8s.jpg" />
+                    </div>
+                    <div class="item">
+                        <h2>a lista de schindler</h2>
+                        <img src="https://br.web.img2.acsta.net/medias/nmedia/18/90/59/58/20103846.jpg" />
+                        </div>
+                        <div class="item">
+                            <h2>homem aranha</h2>
+                            <img src="https://image.tmdb.org/t/p/original/2T3GkzO6Ar5dlp6Bet43UnxZfQr.jpg" />
+                        </div>  
+    <script>
+        const apikey = '8fa8be48';
+        const frmpesquisa = document.querySelector("form");
+        
+        frmpesquisa.onsubmit = (ev) => {
+            ev.preventDefault();
+            
+            const pesquisa = ev.target.pesquisa.value;
+
+            if (pesquisa == "") {
+                alert('preencha o campo!');
+                return;
+            }
+
+            fetch(`https://www.omdbapi.com/?s=${pesquisa}&apikey=${apikey}`)
+                .then(result => result.json())
+                .then(json => {
+                    if (json.Search) {
+                        carregalista(json);
+                    } else {
+                        alert('Nenhum filme encontrado.');
+                    }
+                });
+        };
+
+        const carregalista = (j) => {
+            const lista = document.querySelector("div.lista");
+            lista.innerHTML = "";
+
+            j.Search.forEach(element => {
+                let item = document.createElement("div");
+                item.classList.add("item");
+
+                item.innerHTML = `<img src="${element.Poster}" /><h2>${element.Title}</h2>`;
+                lista.appendChild(item);
+            });
+        };
+    </script>
+</body>
+</html>
